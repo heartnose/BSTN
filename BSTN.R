@@ -11,6 +11,14 @@ vecy <- data[[1]]; Y <- data[[2]]; X <- data[[3]];
 
 BSTN_matrix <- function(Y,X,vecy, n.burn = 10, n.save = 100, thin = 1){
   
+  #Inputs:
+  #y = teeth x site x nsubs responses
+  #X = p x nsubs matrix of subject-level covariates 
+  #vecy = (teeth x site) x nsubs matrix
+  #n.burn = number to discard as burn-in
+  #n.save = number of MCMC samples
+  #thin = number of iterations to skip before collecting the next posterior sample
+  
   t = dim(Y)[1]; s = dim(Y)[2]; p = dim(X)[1]; n = dim(X)[2];
   
   # Store MCMC out
@@ -25,11 +33,10 @@ BSTN_matrix <- function(Y,X,vecy, n.burn = 10, n.save = 100, thin = 1){
   
   BOLS<-solve(X%*%t(X))%*%X%*%t(vecy) # vectorized OLS estimator
   
-  B.est <- BOLS#rbind(matrix(0,1,t*s),matrix(1,2,t*s)) # B_{(3)}
+  B.est <- BOLS  # B_{(3)}
   
   W <- matrix(1, t*s,n) # vecotrize W = |Z_{2i}|
   
-  #rho <- matrix(c(0.6,0.6), 2, 1)
   rho <- matrix(c(0.5,0.5), 2, 1)
   
   sigma.sq <- 1.5
